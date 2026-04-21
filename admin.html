@@ -176,7 +176,7 @@ tr:hover td{background:var(--gp)}
       <table>
         <thead><tr>
           <th>#</th><th>الاسم</th><th>الهاتف</th><th>الأسهم</th>
-          <th>اللحم</th><th>الملحقات</th><th>الدفع</th><th>المبلغ</th>
+          <th>اللحم</th><th>الدفع</th><th>المبلغ</th>
           <th>عرفنا منين</th><th>الحالة</th><th>التسجيل</th><th>إجراءات</th>
         </tr></thead>
         <tbody id="atbl"></tbody>
@@ -198,17 +198,7 @@ tr:hover td{background:var(--gp)}
         <option>نعم، أرغب في الاستلام</option>
         <option>لا، أتبرع به كاملاً للمستحقين</option>
       </select></div>
-    <div class="mf"><label>الملحقات</label>
-      <select id="eac2">
-        <option>الكبدة والقلب والكلاوي</option>
-        <option>الكرشة</option>
-        <option>الممبار</option>
-        <option>العكاوي</option>
-        <option>الرأس</option>
-        <option>اللسان</option>
-        <option>الجلد</option>
-        <option>لا أرغب في الاستلام</option>
-      </select></div>
+
     <div class="mf"><label>طريقة الدفع</label>
       <select id="epm2">
         <option>فودافون كاش</option>
@@ -411,7 +401,6 @@ function rTbl(){
       '<td>'+(r.phone||'')+'</td>'+
       '<td>'+(r.shares||'')+'</td>'+
       '<td>'+(r.receive_meat||'')+'</td>'+
-      '<td>'+(r.accessories||'')+'</td>'+
       '<td>'+(r.payment_method||'')+'</td>'+
       '<td>'+(r.amount||'')+'</td>'+
       '<td><span class="bdg '+(bm[r.status]||'b-new')+'">'+(r.status||'جديد')+'</span></td>'+
@@ -429,7 +418,6 @@ function oEdit(i){
   document.getElementById('ep2').value  = r.phone||'';
   document.getElementById('esh2').value = r.shares||'سهم واحد';
   document.getElementById('erc2').value = r.receive_meat||'نعم، أرغب في الاستلام';
-  document.getElementById('eac2').value = r.accessories||'لا أرغب في الاستلام';
   document.getElementById('epm2').value = r.payment_method||'فودافون كاش';
   document.getElementById('etr2').value = r.transferred||'تم التحويل بالفعل';
   document.getElementById('ea2').value  = r.amount||'';
@@ -446,7 +434,6 @@ function saveEdit(){
     phone:          document.getElementById('ep2').value,
     shares:         document.getElementById('esh2').value,
     receive_meat:   document.getElementById('erc2').value,
-    accessories:    document.getElementById('eac2').value,
     payment_method: document.getElementById('epm2').value,
     transferred:    document.getElementById('etr2').value,
     amount:         document.getElementById('ea2').value,
@@ -464,8 +451,8 @@ function delRow(i){
 
 function expCSV(){
   if(!rows.length){alert('لا توجد بيانات');return;}
-  const h=['وقت التسجيل','الاسم','الهاتف','الأسهم','استلام اللحم','الملحقات','الدفع','التحويل','المبلغ','تأكيد التوزيع','الشروط','الحالة'];
-  const d=rows.map(r=>[r.timestamp,r.name,r.phone,r.shares,r.receive_meat,r.accessories,
+  const h=['وقت التسجيل','الاسم','الهاتف','الأسهم','استلام اللحم','الدفع','التحويل','المبلغ','تأكيد التوزيع','الشروط','الحالة'];
+  const d=rows.map(r=>[r.timestamp,r.name,r.phone,r.shares,r.receive_meat,
     r.payment_method,r.transferred,r.amount,r.confirm_share,r.terms,r.status]
     .map(v=>'"'+(v||'').replace(/"/g,'""')+'"').join(','));
   const a=document.createElement('a');
@@ -518,7 +505,7 @@ function aLogout(){
 }
 
 function loadData(){
-  document.getElementById('atbl').innerHTML='<tr><td colspan="12" style="text-align:center;padding:2rem;color:var(--mu)">جارٍ التحميل...</td></tr>';
+  document.getElementById('atbl').innerHTML='<tr><td colspan="11" style="text-align:center;padding:2rem;color:var(--mu)">جارٍ التحميل...</td></tr>';
   apiRead(res=>{
     if(res.success){rows=res.data;rStats();rTbl();}
     else toast('❌ خطأ في تحميل البيانات');
@@ -552,7 +539,6 @@ function rTbl(){
       '<td>'+(r.phone||'')+'</td>'+
       '<td>'+(r.shares||'')+'</td>'+
       '<td>'+(r.receive_meat||'')+'</td>'+
-      '<td>'+(r.accessories||'')+'</td>'+
       '<td>'+(r.payment_method||'')+'</td>'+
       '<td>'+(r.amount||'')+'</td>'+
       '<td>'+(r.source||'')+'</td>'+
@@ -571,7 +557,6 @@ function oEdit(i){
   document.getElementById('ep2').value  = r.phone||'';
   document.getElementById('esh2').value = r.shares||'سهم واحد';
   document.getElementById('erc2').value = r.receive_meat||'نعم، أرغب في الاستلام';
-  document.getElementById('eac2').value = r.accessories||'لا أرغب في الاستلام';
   document.getElementById('epm2').value = r.payment_method||'فودافون كاش';
   document.getElementById('etr2').value = r.transferred||'تم التحويل بالفعل';
   document.getElementById('ea2').value  = r.amount||'';
@@ -588,7 +573,6 @@ function saveEdit(){
     phone:          document.getElementById('ep2').value,
     shares:         document.getElementById('esh2').value,
     receive_meat:   document.getElementById('erc2').value,
-    accessories:    document.getElementById('eac2').value,
     payment_method: document.getElementById('epm2').value,
     transferred:    document.getElementById('etr2').value,
     amount:         document.getElementById('ea2').value,
@@ -606,8 +590,8 @@ function delRow(i){
 
 function expCSV(){
   if(!rows.length){alert('لا توجد بيانات');return;}
-  const h=['وقت التسجيل','الاسم','الهاتف','الأسهم','استلام اللحم','الملحقات','الدفع','التحويل','المبلغ','تأكيد التوزيع','الشروط','عرفنا منين','الحالة'];
-  const d=rows.map(r=>[r.timestamp,r.name,r.phone,r.shares,r.receive_meat,r.accessories,
+  const h=['وقت التسجيل','الاسم','الهاتف','الأسهم','استلام اللحم','الدفع','التحويل','المبلغ','تأكيد التوزيع','الشروط','عرفنا منين','الحالة'];
+  const d=rows.map(r=>[r.timestamp,r.name,r.phone,r.shares,r.receive_meat,
     r.payment_method,r.transferred,r.amount,r.confirm_share,r.terms,r.source,r.status]
     .map(v=>'"'+(v||'').replace(/"/g,'""')+'"').join(','));
   const a=document.createElement('a');
